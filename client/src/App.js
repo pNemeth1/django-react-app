@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Nav from './components/Nav';
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
+// import LoginForm from './components/LoginForm';
+// import SignupForm from './components/SignupForm';
 import './App.css';
 
 import useAuth from './hooks/useAuth';
@@ -10,35 +10,17 @@ const App = () => {
 
   const { state, handle_logout, handle_signup, handle_login, display_form } = useAuth();
 
-    let form;
-    switch (this.state.displayed_form) {
-      case 'login':
-        form = <LoginForm handle_login={handle_login} />;
-        break;
-      case 'signup':
-        form = <SignupForm handle_signup={handle_signup} />;
-        break;
-      default:
-        form = null;
 
+
+    
 
     return (
-      <div className="App">
-        <Nav
-          logged_in={state.logged_in}
-          display_form={display_form}
-          handle_logout={handle_logout}
-        />
-        {form}
-        <h3>
-          {this.state.logged_in
-            ? `Hello, ${state.username}`
-            : 'Please Log In'}
-        </h3>
-      </div>
+        <div className="App">
+            <input type="text"/>
+          </div>
     );
   }
-}
+
 
 export default App;
 

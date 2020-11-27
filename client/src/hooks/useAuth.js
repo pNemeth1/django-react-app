@@ -1,11 +1,11 @@
 import {useState, useEffect } from 'react';
-import axios from axios;
+import axios from 'axios';
 
 
-const fetchData = async () => {
+const fetchUser = async () => {
     let result;
     try {
-        axios.get('http://localhost:8000/core/current_user/', {
+        result = axios.get('http://localhost:8000/core/current_user/', {
             headers: {
               Authorization: `JWT ${localStorage.getItem('token')}`
             }
@@ -18,7 +18,7 @@ const fetchData = async () => {
 }
 
 const useAuth = () => {
-    [state, setState] = useState({
+    const [state, setState] = useState({
         displayed_form: '',
         logged_in: localStorage.getItem('token') ? true : false,
         username: ''
@@ -27,14 +27,14 @@ const useAuth = () => {
     useEffect(() => {
 
         const getLogin = async () => {
-            await fetchData().then(res => res.json())
+            await fetchUser().then(res => res.json())
             .then(json => {
                 setState({ username: json.username });
               });
         }
         getLogin();
 
-    });
+    }, []);
 
     const handle_login = (e, data) => {
         e.preventDefault();
@@ -48,7 +48,7 @@ const useAuth = () => {
           .then(res => res.json())
           .then(json => {
             localStorage.setItem('token', json.token);
-            this.setState({
+            setState({
               logged_in: true,
               displayed_form: '',
               username: json.user.username
@@ -68,7 +68,7 @@ const useAuth = () => {
           .then(res => res.json())
           .then(json => {
             localStorage.setItem('token', json.token);
-            this.setState({
+            setState({
               logged_in: true,
               displayed_form: '',
               username: json.username
@@ -78,17 +78,12 @@ const useAuth = () => {
     
       const handle_logout = () => {
         localStorage.removeItem('token');
-        this.setState({ logged_in: false, username: '' });
+        setState({ logged_in: false, username: '' });
       };
     
-      const display_form = form => {
-        this.setState({
-          displayed_form: form
-        });
-      };
 
-    return { state, handle_logout, handle_signup, handle_login, display_form }
+    return { state, setState, handle_logout, handle_signup, handle_login }
 
 }
 
-export default useAuth
+export default useAuth;
